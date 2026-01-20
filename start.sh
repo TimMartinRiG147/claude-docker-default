@@ -7,7 +7,7 @@ export WORK_DIR
 (
   cd ~/repos/claude-docker-default
 
-  docker-compose up -d
+  docker-compose up -d --remove-orphans
 
   docker-compose ps
 
