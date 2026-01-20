@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  nordvpn:
+  nordvpn-default:
     image: ghcr.io/bubuntux/nordvpn
-    container_name: claude-nordvpn
+    container_name: claude-nordvpn-default
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -25,8 +25,8 @@ services:
     build: .
     container_name: claude-code-default
     depends_on:
-      - nordvpn
-    network_mode: "service:nordvpn"
+      - nordvpn-default
+    network_mode: "service:nordvpn-default"
     volumes:
       - ${WORK_DIR}:/repos
       - ~/.ssh:/root/.ssh:ro
