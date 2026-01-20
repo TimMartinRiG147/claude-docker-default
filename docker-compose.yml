@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  nordvpn:
+    image: ghcr.io/bubuntux/nordvpn
+    container_name: claude-nordvpn
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - TOKEN=e9f2ab064af643ca3a102466ec8a3b7cfe5e8f6cbcca0e9a6d6ab9a1d2dadc49
+      - CONNECT=Malta
+      - TECHNOLOGY=NordLynx
+      - NETWORK=10.0.50.0/24
+      - TZ=Europe/Malta
+    sysctls:
+      - net.ipv4.conf.all.rp_filter=2
+      - net.ipv6.conf.all.disable_ipv6=1
+    restart: unless-stopped
+    devices:
+      - /dev/net/tun
+    # No ports needed for OAuth
+
+  claude-code:
+    build: .
+    container_name: claude-code
+    depends_on:
+      - nordvpn
+    network_mode: "service:nordvpn"
+    volumes:
+      - .:/repos
+      - ~/.ssh:/root/.ssh:ro
+      - ~/.gitconfig:/root/.gitconfig:ro
+      - claude-code-config:/root/.config/claude-code
+      - ~/.zshrc:/root/.bashrc:ro
+    stdin_open: true
+    tty: true
+    command: ["tail", "-f", "/dev/null"]
+    restart: unless-stopped
+
+volumes:
+  claude-code-config:
