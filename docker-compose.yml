@@ -21,14 +21,14 @@ services:
       - /dev/net/tun
     # No ports needed for OAuth
 
-  claude-code:
+  claude-code-default:
     build: .
-    container_name: claude-code
+    container_name: claude-code-default
     depends_on:
       - nordvpn
     network_mode: "service:nordvpn"
     volumes:
-      - .:/repos
+      - ${WORK_DIR}:/repos
       - ~/.ssh:/root/.ssh:ro
       - ~/.gitconfig:/root/.gitconfig:ro
       - claude-code-config:/root/.config/claude-code

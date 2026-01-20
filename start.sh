@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Capture the current working directory
+WORK_DIR="$(pwd)"
+export WORK_DIR
+
 (
   cd ~/repos/claude-docker-default
 
@@ -8,6 +12,7 @@
   docker-compose ps
 
   echo ""
-  echo "Entering claude-code container..."
-  docker-compose exec claude-code bash
+  echo "Mounting: $WORK_DIR -> /workspace"
+  echo "Entering claude-code-default container..."
+  docker-compose exec claude-code-default bash
 )
